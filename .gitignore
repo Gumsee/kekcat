@@ -30,3 +30,15 @@
 *.exe
 *.out
 *.app
+
+
+/build/
+/src/build/
+/src/.cache/
+/.cache/
+/compile_commands.json
+/core
+*.so
+*.out
+*.log
+*.cmake
