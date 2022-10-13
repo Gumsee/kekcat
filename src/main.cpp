@@ -24,11 +24,14 @@ void colorizeStream(std::istream& stream)
 int main(int argc, char** argv)
 {    
     srand(time(0));
-    
+
     passArguments(argv, argc, [](const char* filename) {
         //If argument isnt defined, it must be a file
         vFileList.push_back(filename);
     });
+
+    if(argc == 1)
+        vFileList.push_back("-");
 
     /*struct winsize w;
     ioctl(fileno(stdout), TIOCGWINSZ, &w);
