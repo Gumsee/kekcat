@@ -5,7 +5,7 @@
 #include "kekcat.h"
 #include <sstream>
 
-typedef void (*argfunc)(void);
+typedef bool (*argfunc)(void);
 void usage();
 
 struct Argument
@@ -26,12 +26,12 @@ struct Argument
 
 static Argument aAvailableArguments[] = 
 {
-    Argument("--help",       "-h", "Prints this help menu",                     []() { usage(); }),
-    Argument("--usage",      "-u", "Prints this help menu",                     []() { usage(); }),
-    Argument("--truecolor",  "-t", "Tries to use 24Bit truecolor format",       []() { kekcat::bTrueColor = true; }),
-    Argument("--background", "-b", "Changes only background color",             []() { kekcat::bBackground = true; }),
-    Argument("--invert",     "-i", "Inverts text color if --background is set", []() { kekcat::bInvert = true; }),
-    Argument("--force",      "-f", "Forces color on non Terminal stdout",       []() { kekcat::bForceColor = true; }),
+    Argument("--help",       "-h", "Prints this help menu",                     []() { usage();                    return false; }),
+    Argument("--usage",      "-u", "Prints this help menu",                     []() { usage();                    return false; }),
+    Argument("--truecolor",  "-t", "Tries to use 24Bit truecolor format",       []() { kekcat::bTrueColor = true;  return true; }),
+    Argument("--background", "-b", "Changes only background color",             []() { kekcat::bBackground = true; return true; }),
+    Argument("--invert",     "-i", "Inverts text color if --background is set", []() { kekcat::bInvert = true;     return true; }),
+    Argument("--force",      "-f", "Forces color on non Terminal stdout",       []() { kekcat::bForceColor = true; return true; }),
 };
 
 inline unsigned int numArguments() { return sizeof(aAvailableArguments) / sizeof(Argument); }
@@ -87,10 +87,10 @@ inline void usage()
     }
 }
 
-inline void passArguments(char* args[], int cnt, void (*defaultAction)(const char*))
+inline bool passArguments(char* args[], int cnt, void (*defaultAction)(const char*))
 {
     if(cnt <= 1) 
-        return;
+        return true;
 
     for(int i = 1; i < cnt; i++)
     {
@@ -103,7 +103,8 @@ inline void passArguments(char* args[], int cnt, void (*defaultAction)(const cha
             if(strcmp(passedArgStr, arg.switchName) == 0 || strcmp(passedArgStr, arg.switchNameShort) == 0)
             {
                 hitAny = true;
-                arg.func();
+                if(!arg.func())
+                    return false;
             }
         }
 
@@ -113,7 +114,7 @@ inline void passArguments(char* args[], int cnt, void (*defaultAction)(const cha
             {
                 std::cerr << "Error: unknown argument: '" << passedArgStr << "'" << std::endl;
                 std::cerr << "Try --help for help." << std::endl;
-                return;
+                return false;
             }
             else
             {
@@ -121,4 +122,6 @@ inline void passArguments(char* args[], int cnt, void (*defaultAction)(const cha
             }
         }
     }
+
+    return true;
 }

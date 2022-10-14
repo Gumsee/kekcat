@@ -25,10 +25,13 @@ int main(int argc, char** argv)
 {    
     srand(time(0));
 
-    passArguments(argv, argc, [](const char* filename) {
+    if(!passArguments(argv, argc, [](const char* filename) {
         //If argument isnt defined, it must be a file
         vFileList.push_back(filename);
-    });
+    }))
+    {
+        return 1;
+    }
 
     if(!vFileList.size())
         vFileList.push_back("-");
