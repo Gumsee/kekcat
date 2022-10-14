@@ -5,13 +5,14 @@ BUILDDIR=$ROOTDIR/build/
 mkdir -p $BUILDDIR
 cd $BUILDDIR
 
+cmake -DCMAKE_BUILD_TYPE=release $ROOTDIR
+
 test "$ARGS" = "install" && {
     make install
     exit 0
 }
 
 
-cmake -DCMAKE_BUILD_TYPE=release $ROOTDIR
 make
 
 cd "$ROOTDIR"
