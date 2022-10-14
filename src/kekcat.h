@@ -8,6 +8,7 @@ namespace kekcat
     extern bool bTrueColor;
     extern bool bBackground;
     extern bool bInvert;
+    extern bool bForceColor;
 
     struct KEKRGB 
     { 

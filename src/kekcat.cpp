@@ -1,6 +1,7 @@
 #include "kekcat.h"
 #include <cstdio>
 #include <cstring>
+#include <unistd.h>
 
 namespace kekcat
 {
@@ -10,6 +11,7 @@ namespace kekcat
     bool bTrueColor  = false;
     bool bBackground = false;
     bool bInvert     = false;
+    bool bForceColor = false;
 
     KEKRGB HSVToRGB(float h, float s, float v)
     {
@@ -44,22 +46,27 @@ namespace kekcat
             KEKRGB color = HSVToRGB(offset + (column * iStepsize), iSaturation, iValue);
             KEKRGB invertedcolor = KEKRGB(255 - color.r, 255 - color.g, 255 - color.b);
             
-            
-            //Background Color
-            if(bBackground) 
-                printf("\033[48;2;%d;%d;%dm", color.r, color.g, color.b);
+            //Only output color if stdout is a Terminal, or if its being forced
+            if(isatty(fileno(stdout)) || bForceColor)
+            {
+                //Background Color
+                if(bBackground) 
+                    printf("\033[48;2;%d;%d;%dm", color.r, color.g, color.b);
 
-            //Text Color
-            if(bInvert && bBackground)
-                printf("\033[38;2;%d;%d;%dm", invertedcolor.r, invertedcolor.g, invertedcolor.b); 
-            else if(!bBackground)
-                printf("\033[38;2;%d;%d;%dm", color.r, color.g, color.b);
+                //Text Color
+                if(bInvert && bBackground)
+                    printf("\033[38;2;%d;%d;%dm", invertedcolor.r, invertedcolor.g, invertedcolor.b); 
+                else if(!bBackground)
+                    printf("\033[38;2;%d;%d;%dm", color.r, color.g, color.b);
+            }
 
             //Text
             printf("%c", c);
         }
 
         //Colorreset
-        printf("\033[0m\n");
+        if(isatty(fileno(stdout)) || bForceColor)
+            printf("\033[0m");
+        printf("\n");
     }
 };

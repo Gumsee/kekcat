@@ -31,6 +31,7 @@ static Argument aAvailableArguments[] =
     Argument("--truecolor",  "-t", "Tries to use 24Bit truecolor format",       []() { kekcat::bTrueColor = true; }),
     Argument("--background", "-b", "Changes only background color",             []() { kekcat::bBackground = true; }),
     Argument("--invert",     "-i", "Inverts text color if --background is set", []() { kekcat::bInvert = true; }),
+    Argument("--force",      "-f", "Forces color on non Terminal stdout",       []() { kekcat::bForceColor = true; }),
 };
 
 inline unsigned int numArguments() { return sizeof(aAvailableArguments) / sizeof(Argument); }
@@ -48,10 +49,11 @@ R"(
     
 Examples:
   kekcat foo - bar          Output foo's contents, then stdin, then bar's contents.
-  echo "Hellowo" | kekcat   Display a rainbow cookie.
+  echo "Hellowo" | kekcat   rainbowo
 
 Report bugs at    https://github.com/Gumsee/kekcat/issues
 kekcat home page: https://github.com/Gumsee/kekcat/
+Pay respect at    https://github.com/busyloop/lolcat/
 )";
 
 inline std::string offsetGen(int strLength, int dist = 15)
@@ -106,6 +108,17 @@ inline void passArguments(char* args[], int cnt, void (*defaultAction)(const cha
         }
 
         if(!hitAny)
-            defaultAction(passedArgStr);
+        {
+            if(passedArgStr[0] == '-')
+            {
+                std::cerr << "Error: unknown argument: '" << passedArgStr << "'" << std::endl;
+                std::cerr << "Try --help for help." << std::endl;
+                return;
+            }
+            else
+            {
+                defaultAction(passedArgStr);
+            }
+        }
     }
 }

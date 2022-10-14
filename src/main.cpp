@@ -1,9 +1,9 @@
 #include "kekcat.h"
 #include "arguments.h"
 #include <cstring>
-#include <sys/ioctl.h>
 #include <fstream>
 #include <vector>
+//#include <sys/ioctl.h>
 
 std::vector<std::string> vFileList;
 unsigned long offset;
@@ -30,7 +30,7 @@ int main(int argc, char** argv)
         vFileList.push_back(filename);
     });
 
-    if(argc == 1)
+    if(!vFileList.size())
         vFileList.push_back("-");
 
     /*struct winsize w;
@@ -54,7 +54,11 @@ int main(int argc, char** argv)
         }
         else
         {
-            std::ifstream file(vFileList[i]);
+            std::ifstream file(filename);
+            if(!file)
+            {
+                std::cerr << "kekcat: " << filename << ": No such file or directory" << std::endl;
+            }
             colorizeStream(file);
             file.close();
         }
