@@ -1,4 +1,5 @@
 #pragma once
+#include "unicode.h"
 
 namespace kekcat
 {
@@ -19,5 +20,5 @@ namespace kekcat
     };
 
     extern KEKRGB HSVToRGB(float h, float s, float v);
-    extern void colorizeLine(const char* line, unsigned long offset);
+    extern void colorizeLine(unicode line, unsigned long offset);
 };

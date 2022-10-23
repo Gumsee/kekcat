@@ -6,20 +6,20 @@ set (INSTALL_DIR "${CMAKE_CURRENT_SOURCE_DIR}/dist/${CMAKE_BUILD_TYPE}/bin/")
 set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17 -g3 -Wall -Wextra -Wno-pedantic -Wno-unused-parameter")
 set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O0") #Optimization
 
-add_executable(${CMAKE_PROJECT_NAME}-bin "./main.cpp" "./kekcat.cpp")
+add_executable(${CMAKE_PROJECT_NAME}-bin "./main.cpp" "./kekcat.cpp" "./unicode.cpp")
 set_target_properties(${CMAKE_PROJECT_NAME}-bin PROPERTIES OUTPUT_NAME ${CMAKE_PROJECT_NAME})
 
 if(BUILD_SHARED_LIBS)
-    add_library(${CMAKE_PROJECT_NAME} SHARED "kekcat.cpp")
+    add_library(${CMAKE_PROJECT_NAME} SHARED "kekcat.cpp" "unicode.cpp")
 else()
-    add_library(${CMAKE_PROJECT_NAME} STATIC "kekcat.cpp")
+    add_library(${CMAKE_PROJECT_NAME} STATIC "kekcat.cpp" "unicode.cpp")
 endif()
 
 
  
 
 install(
-    FILES kekcat.h
+    FILES kekcat.h unicode.h
     DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${CMAKE_PROJECT_NAME}/
 ) 
 

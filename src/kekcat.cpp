@@ -38,11 +38,10 @@ namespace kekcat
         }
     }
 
-    void colorizeLine(const char* line, unsigned long offset)
+    void colorizeLine(unicode line, unsigned long offset)
     {
-        for(unsigned long column = 0; column < strlen(line); column++)
+        for(unsigned long column = 0; column < line.length(); column++)
         {
-            const char c = line[column];
             KEKRGB color = HSVToRGB(offset + (column * iStepsize), iSaturation, iValue);
             KEKRGB invertedcolor = KEKRGB(255 - color.r, 255 - color.g, 255 - color.b);
             
@@ -61,7 +60,7 @@ namespace kekcat
             }
 
             //Text
-            printf("%c", c);
+            printf(line[column].c_str());
         }
 
         //Colorreset
