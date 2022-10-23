@@ -2,6 +2,7 @@
 #include <cstdio>
 #include <cstring>
 #include <unistd.h>
+#include <iostream>
 
 namespace kekcat
 {
@@ -60,7 +61,7 @@ namespace kekcat
             }
 
             //Text
-            printf(line[column].c_str());
+	    std::cout << line[column];
         }
 
         //Colorreset
